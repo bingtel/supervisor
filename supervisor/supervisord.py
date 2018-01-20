@@ -49,6 +49,10 @@ class Supervisor:
     stop_groups = None # list used for priority ordered shutdown
 
     def __init__(self, options):
+        """
+        :param options: 配置项
+        :type options: `ServerOptions` instance
+        """
         self.options = options
         self.process_groups = {}
         self.ticks = {}
