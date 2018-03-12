@@ -38,6 +38,7 @@ class BasePoller:
 class SelectPoller(BasePoller):
 
     def initialize(self):
+        # 使用select轮询
         self._select = select
         self._init_fdsets()
 
