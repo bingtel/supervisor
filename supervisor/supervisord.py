@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 #!/usr/bin/env python
 
 """supervisord -- run a set of applications as daemons.
@@ -375,4 +377,5 @@ def go(options): # pragma: no cover
         pass
 
 if __name__ == "__main__": # pragma: no cover
+    import pdb ; pdb.set_trace()
     main()
