@@ -97,6 +97,7 @@ class Supervisor:
             self.options.process_environment()
             self.options.openhttpservers(self)
             self.options.setsignals()
+            import pdb ; pdb.set_trace()
             if (not self.options.nodaemon) and self.options.first:
                 self.options.daemonize()
             # writing pid file needs to come *after* daemonizing or pid
@@ -377,5 +378,4 @@ def go(options): # pragma: no cover
         pass
 
 if __name__ == "__main__": # pragma: no cover
-    import pdb ; pdb.set_trace()
     main()
