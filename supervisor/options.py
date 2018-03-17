@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import socket
 import getopt
 import os
@@ -104,6 +105,7 @@ class Options:
         self.add("configfile", None, "c:", "configuration=")
 
         here = os.path.dirname(os.path.dirname(sys.argv[0]))
+        # 默认的搜索路径
         searchpaths = [os.path.join(here, 'etc', 'supervisord.conf'),
                        os.path.join(here, 'supervisord.conf'),
                        'supervisord.conf',
@@ -115,10 +117,13 @@ class Options:
 
         self.environ_expansions = {}
         for k, v in os.environ.items():
+            # 保存当前的系统变量
             self.environ_expansions['ENV_%s' % k] = v
 
     def default_configfile(self):
-        """Return the name of the found config file or print usage/exit."""
+        """Return the name of the found config file or print usage/exit.
+        获取默认的配置文件的路径
+        """
         config = None
         for path in self.searchpaths:
             if os.path.exists(path):
@@ -266,6 +271,7 @@ class Options:
 
         # Call getopt
         try:
+            # 参见: http://www.ywnds.com/?p=10361
             self.options, self.args = getopt.getopt(
                 args, "".join(self.short_options), self.long_options)
         except getopt.error as exc:
@@ -276,6 +282,7 @@ class Options:
             self.usage("positional arguments are not supported: %s" % (str(self.args)))
 
         # Process options returned by getopt
+        # 参数校验
         for opt, arg in self.options:
             name, handler = self.options_map[opt]
             if handler is not None:
@@ -304,6 +311,7 @@ class Options:
 
         if self.configfile is None:
             uid = os.getuid()
+            # root用户
             if uid == 0 and "supervisord" in self.progname: # pragma: no cover
                 self.warnings.warn(
                     'Supervisord is running as root and it is searching '
@@ -324,6 +332,7 @@ class Options:
         This includes reading config file if necessary, setting defaults etc.
         """
         if self.configfile:
+            # 从配置文件中读取配置
             self.process_config_file(do_usage)
 
         # Copy config options to attributes of self.  This only fills
@@ -664,6 +673,8 @@ class ServerOptions(Options):
     def process_groups_from_parser(self, parser):
         groups = []
         all_sections = parser.sections()
+        import pdb
+        pdb.set_trace()
         homogeneous_exclude = []
 
         common_expansions = {'here':self.here}
@@ -702,6 +713,7 @@ class ServerOptions(Options):
                 continue
             program_name = process_or_group_name(section.split(':', 1)[1])
             priority = integer(get(section, 'priority', 999))
+            # 获得[program:xxxx]的配置对象
             processes=self.processes_from_section(parser, section, program_name,
                                                   ProcessConfig)
             groups.append(
@@ -854,6 +866,11 @@ class ServerOptions(Options):
 
     def _processes_from_section(self, parser, section, group_name,
                                 klass=None):
+        """
+        Parameters:
+
+            section - 如: 'program:app'
+        """
         if klass is None:
             klass = ProcessConfig
         programs = []
