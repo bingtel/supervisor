@@ -359,10 +359,14 @@ class Options:
                 self.usage(message)
 
     def process_config_file(self, do_usage):
+        """处理配置文件
+        """
         # Process config file
         if not hasattr(self.configfile, 'read'):
             self.here = os.path.abspath(os.path.dirname(self.configfile))
         try:
+            import pdb
+            pdb.set_trace()
             self.read_config(self.configfile)
         except ValueError as msg:
             if do_usage:
@@ -673,8 +677,6 @@ class ServerOptions(Options):
     def process_groups_from_parser(self, parser):
         groups = []
         all_sections = parser.sections()
-        import pdb
-        pdb.set_trace()
         homogeneous_exclude = []
 
         common_expansions = {'here':self.here}
